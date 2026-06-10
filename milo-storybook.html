@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hebatnya Menjadi Dokter Hewan - Interactive Storybook</title>
+    <!-- Google Fonts for child-friendly typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #e8f5e9;
+            --primary-dark: #1b5e20;
+            --accent: #ff9800;
+            --accent-light: #fff3e0;
+            --accent-dark: #e65100;
+            --bg-gradient: linear-gradient(135deg, #fffde7 0%, #e8f5e9 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --font-main: 'Fredoka', 'Comic Sans MS', sans-serif;
+            --shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            color: var(--primary-dark);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- HOMEPAGE STYLES --- */
+        #home-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .home-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            max-width: 650px;
+            width: 100%;
+            border: 4px solid #a5d6a7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .home-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 8px 8px rgba(0,0,0,0.1));
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .home-title {
+            font-size: 38px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .home-subtitle {
+            font-size: 20px;
+            color: #558b2f;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .role-section {
+            margin-bottom: 30px;
+            background: var(--primary-light);
+            padding: 15px 25px;
+            border-radius: 16px;
+            width: 100%;
+            border: 2px dashed #81c784;
+        }
+
+        .role-section h3 {
+            font-size: 16px;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .role-item strong {
+            color: var(--primary-dark);
+            display: block;
+        }
+
+        .role-item span {
+            color: #555;
+            font-size: 13px;
+        }
+
+        .home-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .start-btn {
+            padding: 16px 45px;
+            font-size: 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--primary-dark);
+            box-shadow: 0 12px 25px rgba(46, 125, 50, 0.4);
+        }
+
+        /* Auto-voiceover Switch */
+        .voice-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #37474f;
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* --- STORY SCREEN STYLES --- */
+        #story-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInStory 0.5s forwards;
+            padding: 20px;
+        }
+
+        @keyframes fadeInStory {
+            to { opacity: 1; }
+        }
+
+        .container {
+            width: 95vw;
+            height: 90vh;
+            max-width: 1200px;
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            border: 6px solid white;
+            position: relative;
+        }
+
+        /* Split Layout */
+        .illustration-side {
+            flex: 1.1;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-right: 4px solid #a5d6a7;
+            overflow: hidden;
+        }
+
+        .text-side {
+            flex: 0.9;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: white;
+            overflow-y: auto;
+        }
+
+        /* --- NARRATIVE TYPOGRAPHY --- */
+        .scene-title {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 15px;
+            border-bottom: 3px dashed #c8e6c9;
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .narrative-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #37474f;
+            margin-bottom: 20px;
+        }
+
+        .narrative-text p {
+            margin-bottom: 12px;
+        }
+
+        /* --- NAVIGATION CONTROLS --- */
+        .controls {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #f1f8e9;
+        }
+
+        .audio-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+            transition: var(--transition);
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent-dark);
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .audio-btn.speaking {
+            animation: pulse-orange 1.5s infinite;
+            background: #e65100;
+        }
+
+        @keyframes pulse-orange {
+            0% { box-shadow: 0 0 0 0 rgba(230, 81, 0, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(230, 81, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(230, 81, 0, 0); }
+        }
+
+        .navigation {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 12px 28px;
+            font-size: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 700;
+            font-family: inherit;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .nav-button:disabled {
+            background: #cfd8dc;
+            color: #90a4ae;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* --- VISUAL ELEMENTS & ANIMATIONS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Scene 1: Bedroom */
+        .visual-room {
+            width: 100%;
+            height: 100%;
+            background: #fff9c4;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .window {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            width: 120px;
+            height: 90px;
+            background: #80deea;
+            border: 6px solid #8d6e63;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sun {
+            font-size: 32px;
+            animation: spin 20s infinite linear;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .cat {
+            font-size: 130px;
+            position: absolute;
+            bottom: 40px;
+            left: 20%;
+            z-index: 10;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .ball {
+            font-size: 60px;
+            position: absolute;
+            bottom: 45px;
+            right: 20%;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .ball-roll {
+            animation: rollBall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .cat-chase {
+            animation: chaseBall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes rollBall {
+            0% { right: 20%; transform: rotate(0deg); }
+            50% { right: 60%; transform: rotate(-360deg); }
+            100% { right: 20%; transform: rotate(-720deg); }
+        }
+
+        @keyframes chaseBall {
+            0% { left: 20%; transform: scaleX(1); }
+            25% { left: 35%; transform: translateY(-50px) scaleX(1); }
+            50% { left: 50%; transform: translateY(0) scaleX(-1); }
+            75% { left: 35%; transform: translateY(-50px) scaleX(-1); }
+            100% { left: 20%; transform: translateY(0) scaleX(1); }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 10px;
+            font-size: 16px;
+            color: var(--primary-dark);
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px dashed var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Speech Bubble */
+        .speech-bubble {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 2px solid var(--primary);
+            bottom: 180px;
+            left: 20%;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .speech-bubble.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-top-color: white;
+            border-bottom: 0;
+            border-left: 0;
+            margin-left: -6px;
+            margin-bottom: -12px;
+        }
+
+        /* Scene 2: Sick Milo */
+        .visual-sick-room {
+            width: 100%;
+            height: 100%;
+            background: #eceff1;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .pillow {
+            width: 220px;
+            height: 80px;
+            background: #90caf9;
+            border-radius: 50% / 30%;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            position: absolute;
+            bottom: 60px;
+            border: 3px solid #64b5f6;
+        }
+
+        .cat-sick {
+            font-size: 110px;
+            position: absolute;
+            bottom: 90px;
+            animation: slow-sigh 4s infinite ease-in-out;
+        }
+
+        @keyframes slow-sigh {
+            0%, 100% { transform: scale(1) rotate(-5deg); }
+            50% { transform: scale(0.95) rotate(-3deg); }
+        }
+
+        .bowl-untouched {
+            font-size: 50px;
+            position: absolute;
+            bottom: 40px;
+            right: 20%;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        /* Scene 3: Travel */
+        .visual-travel {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #bbdefb 0%, #e8f5e9 100%);
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .road-container {
+            width: 100%;
+            height: 80px;
+            background: #90a4ae;
+            position: absolute;
+            bottom: 0;
+            border-top: 4px solid #b0bec5;
+        }
+
+        .road-lines {
+            width: 100%;
+            height: 4px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 20px, transparent 20px, transparent 40px);
+            position: absolute;
+            top: 50%;
+            margin-top: -2px;
+            animation: drive 1.5s infinite linear;
+        }
+
+        @keyframes drive {
+            100% { background-position: -40px 0; }
+        }
+
+        .carrier-basket {
+            font-size: 110px;
+            position: relative;
+            bottom: 20px;
+            cursor: pointer;
+            animation: wobble 2s infinite ease-in-out;
+            transition: var(--transition);
+        }
+
+        .carrier-basket:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        /* Scene 4: Clinic Lobby */
+        .visual-lobby {
+            width: 100%;
+            height: 100%;
+            background: #e0f2f1;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            padding-bottom: 30px;
+        }
+
+        .lobby-desk {
+            width: 70%;
+            height: 100px;
+            background: #8d6e63;
+            border: 4px solid #6d4c41;
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .doctor-avatar {
+            font-size: 120px;
+            position: absolute;
+            bottom: 90px;
+            left: 20%;
+            animation: float 4s infinite ease-in-out;
+            cursor: pointer;
+        }
+
+        .doctor-avatar:hover {
+            animation: wave 0.5s ease-in-out 3;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        .clinic-poster {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 130px;
+            height: 100px;
+            background: white;
+            border: 4px solid #4db6ac;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 11px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .clinic-poster:hover {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        /* Scene 5: Tool Explorer */
+        .visual-exam-table {
+            width: 100%;
+            height: 100%;
+            background: #e0f7fa;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .exam-table {
+            width: 320px;
+            height: 45px;
+            background: #cfd8dc;
+            border: 3px solid #b0bec5;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 80px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .exam-table-legs {
+            position: absolute;
+            bottom: 0;
+            width: 300px;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .exam-table-legs::before, .exam-table-legs::after {
+            content: '';
+            width: 14px;
+            height: 80px;
+            background: #b0bec5;
+        }
+
+        .cat-exam {
+            font-size: 100px;
+            position: absolute;
+            bottom: 115px;
+            transition: var(--transition);
+        }
+
+        /* SVG Stethoscope pulse */
+        .pulse-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pulse-overlay.active {
+            opacity: 1;
+        }
+
+        .pulse-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: pulse-ring 1.5s infinite ease-out;
+        }
+
+        @keyframes pulse-ring {
+            0% { width: 80px; height: 80px; opacity: 1; }
+            100% { width: 220px; height: 220px; opacity: 0; }
+        }
+
+        .thermometer-bar-container {
+            position: absolute;
+            top: 30px;
+            width: 24px;
+            height: 120px;
+            background: #eee;
+            border-radius: 12px;
+            border: 3px solid #bbb;
+            overflow: hidden;
+            display: none;
+            flex-direction: column-reverse;
+        }
+
+        .thermometer-fill {
+            width: 100%;
+            height: 0%;
+            background: #ff1744;
+            transition: height 1s ease-out;
+        }
+
+        /* Tool Grid Widget (Scene 5 Right Side / Content Side) */
+        .tool-explorer-widget {
+            margin-top: 15px;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tool-card {
+            background: var(--primary-light);
+            border: 3px solid #c8e6c9;
+            border-radius: 16px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .tool-card.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .tool-card-icon {
+            font-size: 28px;
+        }
+
+        .tool-card-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .tool-desc-box {
+            background: var(--accent-light);
+            border-left: 5px solid var(--accent);
+            padding: 15px;
+            border-radius: 0 16px 16px 0;
+            font-size: 15px;
+            line-height: 1.4;
+            min-height: 80px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Scene 6: Animal Diagnostic Chart */
+        .animal-tabs {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .animal-tab {
+            flex: 1;
+            background: #eceff1;
+            border: 2px solid #cfd8dc;
+            border-radius: 16px;
+            padding: 10px 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            font-size: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .animal-tab span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #37474f;
+        }
+
+        .animal-tab:hover {
+            background: #e2f1f8;
+            border-color: #90caf9;
+        }
+
+        .animal-tab.active {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.2);
+        }
+
+        .diagnostic-card {
+            background: white;
+            border: 3px solid #e3f2fd;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.03);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .diag-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #bbdefb;
+            padding-bottom: 10px;
+        }
+
+        .diag-emoji {
+            font-size: 45px;
+            background: #e3f2fd;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .diag-title-area h4 {
+            font-size: 20px;
+            color: #1976d2;
+        }
+
+        .diag-title-area p {
+            font-size: 14px;
+            color: #ef5350;
+            font-weight: bold;
+        }
+
+        .diag-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .diag-field {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .diag-field strong {
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Scene 7: Treatment */
+        .treatment-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .treat-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .treat-btn:hover:not(:disabled) {
+            background: #0d47a1;
+            transform: translateY(-2px);
+        }
+
+        .treat-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Syringe Drop animation */
+        .syringe-tool {
+            font-size: 60px;
+            position: absolute;
+            top: 40px;
+            right: 30%;
+            transform: rotate(-45deg);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .drop {
+            position: absolute;
+            font-size: 24px;
+            top: 100px;
+            right: 38%;
+            opacity: 0;
+        }
+
+        .animate-treatment .syringe-tool {
+            animation: showSyringe 1.5s ease-in-out forwards;
+        }
+
+        .animate-treatment .drop {
+            animation: drip 1.5s ease-in-out forwards;
+        }
+
+        @keyframes showSyringe {
+            0% { opacity: 0; transform: translate(50px, -50px) rotate(-45deg); }
+            30% { opacity: 1; transform: translate(0, 0) rotate(-45deg); }
+            70% { opacity: 1; transform: translate(0, 5px) rotate(-45deg); }
+            100% { opacity: 0; transform: translate(50px, -50px) rotate(-45deg); }
+        }
+
+        @keyframes drip {
+            0%, 40% { opacity: 0; transform: translateY(0); }
+            50% { opacity: 1; }
+            70% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 0; }
+        }
+
+        /* Scene 8: Pet Care Simulator */
+        .care-simulator {
+            margin-top: 15px;
+        }
+
+        .care-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .care-item {
+            background: #f1f8e9;
+            border: 2px solid #d0e7b5;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .care-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .care-item.checked {
+            background: #e8f5e9;
+            border-color: #81c784;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .care-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .care-emoji {
+            font-size: 24px;
+        }
+
+        .care-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #81c784;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .care-item.checked .care-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .meter-container {
+            width: 100%;
+            background: #e0e0e0;
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #81c784 0%, #4caf50 100%);
+            transition: width 0.5s ease-out;
+        }
+
+        .meter-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: #37474f;
+            z-index: 5;
+        }
+
+        .care-visual-overlay {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .care-visual-overlay.active {
+            animation: showCareEffect 1.2s ease-in-out forwards;
+        }
+
+        @keyframes showCareEffect {
+            0% { opacity: 0; transform: scale(0.5) translateY(0); }
+            20% { opacity: 1; transform: scale(1) translateY(-20px); }
+            80% { opacity: 1; transform: scale(1) translateY(-20px) rotate(10deg); }
+            100% { opacity: 0; transform: scale(0.5) translateY(-50px); }
+        }
+
+        /* Sparkles for healthy/happy */
+        .sparkle-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        .sparkle-particles.active {
+            display: block;
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 24px;
+            animation: fly-sparkle 1.5s infinite ease-out;
+        }
+
+        @keyframes fly-sparkle {
+            0% { transform: translate(0, 0) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; }
+        }
+
+        /* Scene 9: Ending Ceria */
+        .replay-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
+            transition: var(--transition);
+            font-family: inherit;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .replay-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            display: none;
+        }
+
+        .confetti-container.active {
+            display: block;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            top: -10px;
+            animation: fall-confetti 3s infinite linear;
+        }
+
+        @keyframes fall-confetti {
+            0% { transform: translateY(0) rotate(0); top: -10px; }
+            100% { transform: translateY(110vh) rotate(720deg); top: 100%; }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 900px) {
+            body {
+                overflow: auto;
+                height: auto;
+                padding: 10px 0;
+            }
+            #story-screen {
+                height: auto;
+                padding: 10px;
+            }
+            .container {
+                width: 100%;
+                height: auto;
+                flex-direction: column;
+            }
+            .illustration-side {
+                height: 350px;
+                border-right: none;
+                border-bottom: 4px solid #a5d6a7;
+            }
+            .text-side {
+                padding: 20px;
+            }
+            .tool-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .home-card {
+                padding: 25px;
+            }
+            .home-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HOMEPAGE SCREEN -->
+    <div id="home-screen">
+        <div class="home-card">
+            <div class="home-emoji">🐱🩺✨</div>
+            <h1 class="home-title">Hebatnya Menjadi Dokter Hewan</h1>
+            <p class="home-subtitle">Petualangan Rara dan Milo</p>
+            
+            <div class="role-section">
+                <h3>Kelompok Penyusun (UCP 2)</h3>
+                <div class="role-grid">
+                    <div class="role-item">
+                        <strong>Azkal Adzkia</strong>
+                        <span>Visual & Animation Designer</span>
+                    </div>
+                    <div class="role-item">
+                        <strong>M. Aqil Firdaus</strong>
+                        <span>Interaction & Audio Developer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-controls">
+                <button class="start-btn" onclick="startStory()">Mulai Cerita 🚀</button>
+                <div class="voice-toggle-container" onclick="toggleAutoVoiceHome()">
+                    <span style="font-weight: 500;">Suara Narasi Otomatis (TTS):</span>
+                    <label class="switch">
+                        <input type="checkbox" id="auto-voice-switch" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STORY SCREEN -->
+    <div id="story-screen">
+        <div class="container" id="scenes-container">
+            <!-- Left Side: Interactive Illustration Box -->
+            <div class="illustration-side" id="illustration-container">
+                <!-- Visual content will be dynamically rendered here -->
+            </div>
+
+            <!-- Right Side: Narrative & Controls -->
+            <div class="text-side">
+                <div>
+                    <h2 class="scene-title" id="scene-title-heading">Judul Adegan</h2>
+                    <div class="narrative-text" id="scene-narrative-content">
+                        <!-- Story paragraphs will go here -->
+                    </div>
+                    
+                    <!-- Dynamic interactive controls inserted depending on scene -->
+                    <div id="interactive-controls-container">
+                        <!-- Custom interactive buttons/tabs will go here -->
+                    </div>
+                </div>
+
+                <!-- Footer Navigation -->
+                <div class="controls">
+                    <button class="audio-btn" id="audio-speak-btn" onclick="toggleAudio()" title="Putar Audio Narasi">🔊</button>
+                    <div class="navigation">
+                        <button class="nav-button" id="prev-btn" onclick="previousScene()">← Kembali</button>
+                        <button class="nav-button" id="next-btn" onclick="nextScene()">Lanjut →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Story Data strictly aligned with UCP 2 Storyboard
+        const scenes = [
+            {
+                id: 1,
+                title: "1. Bermain Bersama Milo",
+                narrative: `<p>Suatu pagi yang cerah di kamar, Rara sedang asyik bermain bola bersama Milo, kucing peliharaannya yang sangat lucu.</p>
+                            <p>Suasana kamar terasa begitu ceria dan hangat. Milo berlari gembira mengejar bola kesayangannya.</p>
+                            <p>Hubungan persahabatan antara Rara dan kucingnya begitu dekat!</p>`,
+                speechText: "Suatu pagi yang cerah di kamar, Rara sedang asyik bermain bola bersama Milo, kucing peliharaannya yang sangat lucu. Suasana kamar terasa begitu ceria dan hangat. Milo berlari gembira mengejar bola kesayangannya. Hubungan persahabatan antara Rara dan kucingnya begitu dekat!",
+                renderVisual: () => `
+                    <div class="visual-room">
+                        <div class="window"><div class="sun">☀️</div></div>
+                        <div id="milo-cat" class="cat">🐱</div>
+                        <div id="toy-ball" class="ball">⚽</div>
+                        <div id="speech-bubble" class="speech-bubble">Ngeong! 🐾</div>
+                        <div class="click-hint">Ketuk bola untuk bermain! ⚽</div>
+                    </div>
+                `,
+                initVisual: () => {
+                    const ball = document.getElementById('toy-ball');
+                    const cat = document.getElementById('milo-cat');
+                    const bubble = document.getElementById('speech-bubble');
+                    
+                    ball.addEventListener('click', () => {
+                        ball.classList.add('ball-roll');
+                        cat.classList.add('cat-chase');
+                        bubble.classList.add('show');
+                        
+                        setTimeout(() => {
+                            ball.classList.remove('ball-roll');
+                            cat.classList.remove('cat-chase');
+                            bubble.classList.remove('show');
+                        }, 1500);
+                    });
+                }
+            },
+            {
+                id: 2,
+                title: "2. Milo Terlihat Lemas",
+                narrative: `<p>Namun, setelah puas bermain, Milo tiba-tiba tampak sangat lemas dan diam saja.</p>
+                            <p>Bahkan ketika waktu makan tiba, Milo menolak makanannya. Ia hanya berbaring lesu di atas bantal tidurnya.</p>
+                            <p>Rara pun cemas dan melaporkan keadaan Milo kepada Ibu. Ibu menjelaskan bahwa Milo sedang sakit.</p>
+                            <p>Ibu menghibur: <i>"Jangan khawatir Rara, ada sebuah profesi mulia yang bertugas memeriksa dan merawat hewan-hewan sakit agar sehat kembali. Namanya Dokter Hewan!"</i></p>`,
+                speechText: "Namun, setelah puas bermain, Milo tiba-tiba tampak sangat lemas dan diam saja. Bahkan ketika waktu makan tiba, Milo menolak makanannya. Ia hanya berbaring lesu di atas bantal tidurnya. Rara pun cemas dan melaporkan keadaan Milo kepada Ibu. Ibu menjelaskan bahwa Milo sedang sakit. Ibu menghibur: Jangan khawatir Rara, ada sebuah profesi mulia yang bertugas memeriksa dan merawat hewan-hewan sakit agar sehat kembali. Namanya Dokter Hewan!",
+                renderVisual: () => `
+                    <div class="visual-sick-room">
+                        <div class="pillow"></div>
+                        <div class="cat-sick">😿</div>
+                        <div class="bowl-untouched">🐟❌</div>
+                    </div>
+                `,
+                initVisual: () => {}
+            },
+            {
+                id: 3,
+                title: "3. Pergi ke Klinik Hewan",
+                narrative: `<p>Rara memutuskan membawa Milo pergi ke klinik dokter hewan terdekat menggunakan keranjang hewan yang nyaman.</p>
+                            <p>Rara melangkah penuh semangat di sepanjang jalan bersama Ibu demi kesembuhan Milo.</p>
+                            <p>Rara berharap Milo bisa lekas ceria kembali!</p>`,
+                speechText: "Rara memutuskan membawa Milo pergi ke klinik dokter hewan terdekat menggunakan keranjang hewan yang nyaman. Rara melangkah penuh semangat di sepanjang jalan bersama Ibu demi kesembuhan Milo. Rara berharap Milo bisa lekas ceria kembali!",
+                renderVisual: () => `
+                    <div class="visual-travel">
+                        <div class="road-container">
+                            <div class="road-lines"></div>
+                        </div>
+                        <div class="carrier-basket">🧺🐱</div>
+                        <div class="click-hint">Ketuk keranjang untuk bergoyang!</div>
+                    </div>
+                `,
+                initVisual: () => {
+                    const basket = document.querySelector('.carrier-basket');
+                    basket.addEventListener('click', () => {
+                        basket.style.animation = 'none';
+                        setTimeout(() => {
+                            basket.style.animation = 'wobble 0.5s ease-in-out 2';
+                        }, 50);
+                    });
+                }
+            },
+            {
+                id: 4,
+                title: "4. Suasana Klinik yang Bersih",
+                narrative: `<p>Saat melangkah masuk, Rara diperlihatkan suasana ruang klinik hewan yang bersih, cerah, dan ramah anak.</p>
+                            <p>Dindingnya penuh hiasan poster bergambar hewan yang lucu. Seorang Dokter Hewan menyambut Rara dan Milo dengan ramah.</p>
+                            <p>Rara langsung merasa aman dan tidak takut lagi membawa Milo diperiksa.</p>`,
+                speechText: "Saat melangkah masuk, Rara diperlihatkan suasana ruang klinik hewan yang bersih, cerah, dan ramah anak. Dindingnya penuh hiasan poster bergambar hewan yang lucu. Seorang Dokter Hewan menyambut Rara dan Milo dengan ramah. Rara langsung merasa aman dan tidak takut lagi membawa Milo diperiksa.",
+                renderVisual: () => `
+                    <div class="visual-lobby">
+                        <div class="clinic-poster" onclick="alert('Poster Klinik: Sayangi dan Rawatlah Hewan Peliharaan Kita! ❤️')">📄🩺🐾<br>Cek Rutin!</div>
+                        <div class="doctor-avatar">👨‍⚕️</div>
+                        <div class="lobby-desk"></div>
+                    </div>
+                `,
+                initVisual: () => {}
+            },
+            {
+                id: 5,
+                title: "5. Memeriksa Milo (Alat Medis)",
+                narrative: `<p>Dokter hewan mulai memeriksa kondisi fisik Milo di meja pemeriksaan.</p>
+                            <p>Dokter menggunakan beberapa alat penting. <b>Ketuk setiap alat medis dokter di bawah ini</b> untuk mempelajari fungsi pentingnya!</p>`,
+                speechText: "Dokter hewan mulai memeriksa kondisi fisik Milo di meja pemeriksaan. Dokter menggunakan beberapa alat penting. Ketuk setiap alat medis dokter di bawah ini untuk mempelajari fungsi pentingnya!",
+                renderVisual: () => `
+                    <div class="visual-exam-table">
+                        <div class="cat-exam" id="exam-cat">🐱</div>
+                        <div class="exam-table"></div>
+                        <div class="exam-table-legs"></div>
+                        
+                        <!-- Overlay Animations -->
+                        <div class="pulse-overlay" id="heartbeat-pulse">
+                            <div class="pulse-circle"></div>
+                        </div>
+                        <div class="thermometer-bar-container" id="thermo-container">
+                            <div class="thermometer-fill" id="thermo-fill"></div>
+                        </div>
+                        <div class="syringe-tool" id="syringe-tool">💧💉</div>
+                        <div class="drop" id="syringe-drop">💧</div>
+                    </div>
+                `,
+                initVisual: () => {
+                    // This function registers click handlers in the widget
+                    window.selectTool = (toolId) => {
+                        const descBox = document.getElementById('tool-desc');
+                        const cat = document.getElementById('exam-cat');
+                        
+                        // Reset all visual overlays
+                        document.getElementById('heartbeat-pulse').classList.remove('active');
+                        document.getElementById('thermo-container').style.display = 'none';
+                        document.getElementById('thermo-fill').style.height = '0%';
+                        document.getElementById('syringe-tool').style.opacity = '0';
+                        document.getElementById('syringe-drop').style.opacity = '0';
+                        
+                        // Reset active classes on tool cards
+                        document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
+                        
+                        // Set current card active
+                        const selectedCard = document.getElementById(`tool-${toolId}`);
+                        if (selectedCard) selectedCard.classList.add('active');
+
+                        // Mark tool as explored
+                        exploredTools[toolId] = true;
+                        checkAllToolsExplored();
+
+                        switch (toolId) {
+                            case 'stetoskop':
+                                descBox.innerHTML = "<strong>🩺 Stetoskop:</strong> Digunakan untuk mendengar detak jantung dan suara paru-paru hewan. Dokter menempelkannya ke dada Milo. <i>Dug... dug... dug... normal!</i>";
+                                document.getElementById('heartbeat-pulse').classList.add('active');
+                                cat.style.animation = 'pulse 1s infinite';
+                                break;
+                            case 'termometer':
+                                descBox.innerHTML = "<strong>🌡️ Termometer:</strong> Berguna untuk mengukur suhu tubuh hewan. Milo sedikit demam dengan suhu 38.5° Celcius.";
+                                const thermoContainer = document.getElementById('thermo-container');
+                                thermoContainer.style.display = 'flex';
+                                setTimeout(() => {
+                                    document.getElementById('thermo-fill').style.height = '75%';
+                                }, 50);
+                                cat.style.animation = 'none';
+                                break;
+                            case 'suntikan':
+                                descBox.innerHTML = "<strong>💉 Suntikan:</strong> Digunakan untuk menyuntikkan obat cair atau vaksin ke tubuh hewan demi menangkal penyakit.";
+                                const syringe = document.getElementById('syringe-tool');
+                                const drop = document.getElementById('syringe-drop');
+                                syringe.style.opacity = '1';
+                                drop.style.opacity = '1';
+                                syringe.style.animation = 'showSyringe 1.5s ease-in-out forwards';
+                                drop.style.animation = 'drip 1.5s ease-in-out forwards';
+                                setTimeout(() => {
+                                    syringe.style.animation = 'none';
+                                    drop.style.animation = 'none';
+                                }, 1500);
+                                cat.style.animation = 'none';
+                                break;
+                            case 'perban':
+                                descBox.innerHTML = "<strong>🩹 Perban:</strong> Digunakan untuk membalut bagian luka agar bersih, tertutup, dan terhindar dari kuman berbahaya.";
+                                cat.innerHTML = "🐱🩹";
+                                cat.style.animation = 'none';
+                                break;
+                            case 'kandang':
+                                descBox.innerHTML = "<strong>🧺 Kandang Pemeriksaan:</strong> Tempat khusus untuk mengamankan hewan peliharaan sewaktu proses observasi dan pemeriksaan.";
+                                cat.style.animation = 'none';
+                                break;
+                            case 'timbangan':
+                                descBox.innerHTML = "<strong>⚖️ Timbangan Hewan:</strong> Untuk mengukur berat badan hewan agar dokter bisa menentukan dosis pemberian obat yang paling pas.";
+                                descBox.innerHTML += "<br><i>Berat Milo: 4.2 kg. Dosis disesuaikan!</i>";
+                                cat.style.animation = 'none';
+                                break;
+                        }
+                    };
+                },
+                renderWidget: () => `
+                    <div class="tool-explorer-widget">
+                        <div class="tool-grid">
+                            <div class="tool-card" id="tool-stetoskop" onclick="selectTool('stetoskop')">
+                                <div class="tool-card-icon">🩺</div>
+                                <div class="tool-card-name">Stetoskop</div>
+                            </div>
+                            <div class="tool-card" id="tool-termometer" onclick="selectTool('termometer')">
+                                <div class="tool-card-icon">🌡️</div>
+                                <div class="tool-card-name">Termometer</div>
+                            </div>
+                            <div class="tool-card" id="tool-suntikan" onclick="selectTool('suntikan')">
+                                <div class="tool-card-icon">💉</div>
+                                <div class="tool-card-name">Suntikan</div>
+                            </div>
+                            <div class="tool-card" id="tool-perban" onclick="selectTool('perban')">
+                                <div class="tool-card-icon">🩹</div>
+                                <div class="tool-card-name">Perban</div>
+                            </div>
+                            <div class="tool-card" id="tool-kandang" onclick="selectTool('kandang')">
+                                <div class="tool-card-icon">🧺</div>
+                                <div class="tool-card-name">Kandang</div>
+                            </div>
+                            <div class="tool-card" id="tool-timbangan" onclick="selectTool('timbangan')">
+                                <div class="tool-card-icon">⚖️</div>
+                                <div class="tool-card-name">Timbangan</div>
+                            </div>
+                        </div>
+                        <div class="tool-desc-box" id="tool-desc">
+                            💡 Ketuk salah satu alat dokter hewan di atas untuk melihat kegunaannya!
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "6. Mengenal Pasien & Penyakit",
+                narrative: `<p>Dokter menjelaskan bahwa Milo terkena <b>Flu Kucing</b>. Gejalanya adalah bersin-bersin, mata berair, lemas, dan perlu obat antivirus beserta vitamin.</p>
+                            <p>Dokter juga memaparkan bahwa dokter hewan merawat banyak jenis hewan lain dengan gejala dan penanganan berbeda.</p>
+                            <p><b>Ketuk tab hewan di bawah ini</b> untuk mempelajari penyakit mereka!</p>`,
+                speechText: "Dokter menjelaskan bahwa Milo terkena Flu Kucing. Gejalanya adalah bersin-bersin, mata berair, lemas, dan perlu obat antivirus beserta vitamin. Dokter juga memaparkan bahwa dokter hewan merawat banyak jenis hewan lain dengan gejala dan penanganan berbeda. Ketuk tab hewan di bawah ini untuk mempelajari penyakit mereka!",
+                renderVisual: () => `
+                    <div class="visual-exam-table" style="background-color: #e8f5e9;">
+                        <div class="diag-emoji" id="diag-display-emoji" style="font-size: 100px; width:160px; height:160px;">🐱</div>
+                        <div class="exam-table"></div>
+                        <div class="exam-table-legs"></div>
+                    </div>
+                `,
+                initVisual: () => {
+                    // This function registers tab click
+                    window.selectAnimal = (animalId) => {
+                        const displayEmoji = document.getElementById('diag-display-emoji');
+                        const cardContainer = document.getElementById('diag-card-content');
+                        
+                        document.querySelectorAll('.animal-tab').forEach(tab => tab.classList.remove('active'));
+                        document.getElementById(`tab-${animalId}`).classList.add('active');
+                        
+                        let data = {};
+                        switch (animalId) {
+                            case 'kucing':
+                                displayEmoji.innerText = '🐱';
+                                data = { title: 'Kucing', disease: 'Flu Kucing', symptoms: 'Bersin, mata berair, lemas', treatment: 'Obat antivirus, vitamin' };
+                                break;
+                            case 'anjing':
+                                displayEmoji.innerText = '🐶';
+                                data = { title: 'Anjing', disease: 'Infeksi Kutu', symptoms: 'Garuk-garuk, bulu rontok, merah', treatment: 'Obat anti-kutu, dimandikan khusus' };
+                                break;
+                            case 'kelinci':
+                                displayEmoji.innerText = '🐰';
+                                data = { title: 'Kelinci', disease: 'Jamur Kulit', symptoms: 'Bulu rontok, kulit bersisik gatal', treatment: 'Olesan salep antijamur' };
+                                break;
+                            case 'hamster':
+                                displayEmoji.innerText = '🐹';
+                                data = { title: 'Hamster', disease: 'Diare', symptoms: 'Kotoran cair, tubuh lemas sekali', treatment: 'Cairan oralit & makanan khusus' };
+                                break;
+                            case 'burung':
+                                displayEmoji.innerText = '🐦';
+                                data = { title: 'Burung', disease: 'Luka Sayap', symptoms: 'Sayap menggantung, sulit terbang', treatment: 'Sayap dibersihkan & dibalut perban' };
+                                break;
+                        }
+                        
+                        cardContainer.innerHTML = `
+                            <div class="diag-header">
+                                <div class="diag-title-area">
+                                    <h4>${data.title}</h4>
+                                    <p>Penyakit: ${data.disease}</p>
+                                </div>
+                            </div>
+                            <div class="diag-details">
+                                <div class="diag-field">
+                                    <strong>Gejala:</strong>
+                                    <span>${data.symptoms}</span>
+                                </div>
+                                <div class="diag-field">
+                                    <strong>Penanganan:</strong>
+                                    <span>${data.treatment}</span>
+                                </div>
+                            </div>
+                        `;
+                    };
+                },
+                renderWidget: () => `
+                    <div class="animal-explorer-widget">
+                        <div class="animal-tabs">
+                            <div class="animal-tab active" id="tab-kucing" onclick="selectAnimal('kucing')">
+                                <span>🐱</span><span>Kucing</span>
+                            </div>
+                            <div class="animal-tab" id="tab-anjing" onclick="selectAnimal('anjing')">
+                                <span>🐶</span><span>Anjing</span>
+                            </div>
+                            <div class="animal-tab" id="tab-kelinci" onclick="selectAnimal('kelinci')">
+                                <span>🐰</span><span>Kelinci</span>
+                            </div>
+                            <div class="animal-tab" id="tab-hamster" onclick="selectAnimal('hamster')">
+                                <span>🐹</span><span>Hamster</span>
+                            </div>
+                            <div class="animal-tab" id="tab-burung" onclick="selectAnimal('burung')">
+                                <span>🐦</span><span>Burung</span>
+                            </div>
+                        </div>
+                        <div class="diagnostic-card" id="diag-card-content">
+                            <div class="diag-header">
+                                <div class="diag-title-area">
+                                    <h4>Kucing</h4>
+                                    <p>Penyakit: Flu Kucing</p>
+                                </div>
+                            </div>
+                            <div class="diag-details">
+                                <div class="diag-field">
+                                    <strong>Gejala:</strong>
+                                    <span>Bersin, mata berair, lemas</span>
+                                </div>
+                                <div class="diag-field">
+                                    <strong>Penanganan:</strong>
+                                    <span>Obat antivirus, vitamin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "7. Proses Pengobatan Milo",
+                narrative: `<p>Setelah mendiagnosis Milo, dokter hewan mengambil tindakan.</p>
+                            <p>Dokter memoles obat antivirus dan vitamin dengan sabar. Dokter juga membersihkan mata Milo yang berair.</p>
+                            <p><b>Klik tombol di bawah</b> untuk membantu Dokter memberikan obat!</p>`,
+                speechText: "Setelah mendiagnosis Milo, dokter hewan mengambil tindakan. Dokter memoles obat antivirus dan vitamin dengan sabar. Dokter juga membersihkan mata Milo yang berair. Klik tombol di bawah untuk membantu Dokter memberikan obat!",
+                renderVisual: () => `
+                    <div class="visual-exam-table" id="treat-stage" style="background-color: #fff9c4;">
+                        <div class="cat-exam" id="treat-cat">😿</div>
+                        <div class="exam-table"></div>
+                        <div class="exam-table-legs"></div>
+                        <div class="syringe-tool" id="treat-syringe">🧴💊</div>
+                        <div class="drop" id="treat-drop">💧</div>
+                    </div>
+                `,
+                initVisual: () => {
+                    window.applyTreatment = () => {
+                        const treatCat = document.getElementById('treat-cat');
+                        const treatStage = document.getElementById('treat-stage');
+                        const syringe = document.getElementById('treat-syringe');
+                        const drop = document.getElementById('treat-drop');
+                        const treatBtn = document.getElementById('treat-action-btn');
+
+                        treatBtn.disabled = true;
+                        treatStage.classList.add('animate-treatment');
+
+                        setTimeout(() => {
+                            treatCat.innerHTML = "🐱✨";
+                            treatCat.style.animation = 'bounce 0.6s infinite ease-in-out';
+                            showSpeechBubble(treatCat, "Ngeong! 💖");
+                            treatBtn.innerText = "Selesai Diobati! 🎉";
+                        }, 1200);
+                    };
+                },
+                renderWidget: () => `
+                    <div class="treatment-widget">
+                        <button class="treat-btn" id="treat-action-btn" onclick="applyTreatment()">Beri Obat & Vitamin 💊</button>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "8. Cara Merawat Hewan dengan Baik",
+                narrative: `<p>Milo kini sudah jauh membaik, tetapi Dokter mengingatkan Rara agar selalu menjaga kesehatan hewan kesayangannya di rumah.</p>
+                            <p>Ada beberapa cara merawat hewan dengan baik. <b>Ayo bantu Rara merawat Milo dengan melakukan semua tugas perawatan di bawah ini!</b></p>`,
+                speechText: "Milo kini sudah jauh membaik, tetapi Dokter mengingatkan Rara agar selalu menjaga kesehatan hewan kesayangannya di rumah. Ada beberapa cara merawat hewan dengan baik. Ayo bantu Rara merawat Milo dengan melakukan semua tugas perawatan di bawah ini!",
+                renderVisual: () => `
+                    <div class="visual-exam-table" style="background-color: #e0f2f1;">
+                        <div class="cat-exam" id="care-cat" style="bottom: 110px;">🐱</div>
+                        <div class="exam-table" style="bottom: 70px;"></div>
+                        <div class="exam-table-legs" style="height: 70px;"></div>
+                        <div class="care-visual-overlay" id="care-overlay">🥩</div>
+                        <div class="sparkle-particles" id="sparkles-container">
+                            <span class="sparkle" style="--dx:-60px; --dy:-80px; top:40%; left:50%;">✨</span>
+                            <span class="sparkle" style="--dx:70px; --dy:-50px; top:35%; left:45%;">⭐</span>
+                            <span class="sparkle" style="--dx:-40px; --dy:-30px; top:50%; left:60%;">✨</span>
+                            <span class="sparkle" style="--dx:50px; --dy:-90px; top:45%; left:35%;">⭐</span>
+                        </div>
+                    </div>
+                `,
+                initVisual: () => {
+                    // Care actions logic
+                    window.doCare = (actionId) => {
+                        const item = document.getElementById(`care-${actionId}`);
+                        if (item.classList.contains('checked')) return; // Already checked
+
+                        item.classList.add('checked');
+                        
+                        // Trigger visual effects on screen
+                        const overlay = document.getElementById('care-overlay');
+                        const cat = document.getElementById('care-cat');
+                        
+                        let emoji = '❤️';
+                        switch(actionId) {
+                            case 'makan': emoji = '🥩'; cat.innerText = '😸'; break;
+                            case 'kandang': emoji = '🧹'; cat.innerText = '😻'; break;
+                            case 'mandi': emoji = '🧼'; cat.innerText = '😸'; break;
+                            case 'bermain': emoji = '🧸'; cat.innerText = '😼'; break;
+                            case 'periksa': emoji = '🩺'; cat.innerText = '😻'; break;
+                        }
+                        
+                        overlay.innerText = emoji;
+                        overlay.classList.add('active');
+                        
+                        setTimeout(() => {
+                            overlay.classList.remove('active');
+                        }, 1200);
+
+                        // Update meter
+                        completedCareCount++;
+                        const percent = (completedCareCount / 5) * 100;
+                        document.getElementById('meter-bar').style.width = `${percent}%`;
+                        document.getElementById('meter-percentage').innerText = `Kebahagiaan Milo: ${percent}%`;
+
+                        if (completedCareCount === 5) {
+                            document.getElementById('sparkles-container').classList.add('active');
+                            cat.innerHTML = "👑🐱";
+                            cat.style.animation = 'bounce 0.5s infinite';
+                            document.getElementById('meter-percentage').innerText = "Milo Sangat Bahagia & Sehat! 🏆🐾";
+                            setTimeout(() => {
+                                alert("Selamat! Rara telah berhasil mempraktikkan cara merawat Milo dengan benar! 🥳");
+                            }, 500);
+                        }
+                    };
+                },
+                renderWidget: () => {
+                    // Reset care counter on reload of this scene
+                    completedCareCount = 0;
+                    return `
+                        <div class="care-simulator">
+                            <div class="care-checklist">
+                                <div class="care-item" id="care-makan" onclick="doCare('makan')">
+                                    <div class="care-item-left">
+                                        <span class="care-emoji">🥩</span>
+                                        <span>Beri Makanan Sehat & Bergizi</span>
+                                    </div>
+                                    <div class="care-checkbox"></div>
+                                </div>
+                                <div class="care-item" id="care-kandang" onclick="doCare('kandang')">
+                                    <div class="care-item-left">
+                                        <span class="care-emoji">🧹</span>
+                                        <span>Menjaga Kebersihan Kandang</span>
+                                    </div>
+                                    <div class="care-checkbox"></div>
+                                </div>
+                                <div class="care-item" id="care-mandi" onclick="doCare('mandi')">
+                                    <div class="care-item-left">
+                                        <span class="care-emoji">🧼</span>
+                                        <span>Memandikan Kucing Secara Rutin</span>
+                                    </div>
+                                    <div class="care-checkbox"></div>
+                                </div>
+                                <div class="care-item" id="care-bermain" onclick="doCare('bermain')">
+                                    <div class="care-item-left">
+                                        <span class="care-emoji">🧸</span>
+                                        <span>Mengajak Bermain Bersama</span>
+                                    </div>
+                                    <div class="care-checkbox"></div>
+                                </div>
+                                <div class="care-item" id="care-periksa" onclick="doCare('periksa')">
+                                    <div class="care-item-left">
+                                        <span class="care-emoji">🩺</span>
+                                        <span>Rutin Memeriksa Kesehatan Kucing</span>
+                                    </div>
+                                    <div class="care-checkbox"></div>
+                                </div>
+                            </div>
+                            <div class="meter-container">
+                                <div class="meter-fill" id="meter-bar"></div>
+                                <div class="meter-text" id="meter-percentage">Kebahagiaan Milo: 0%</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+            {
+                id: 9,
+                title: "9. Milo Sehat & Dokter Hebat!",
+                narrative: `<p>Milo kini sudah sembuh total dan kembali aktif bermain mengejar bola kecil bersama Rara seperti sedia kala!</p>
+                            <p>Rara merasa sangat kagum melihat bagaimana Dokter Hewan memulihkan kesehatan hewan-hewan lucu yang menderita sakit.</p>
+                            <p>Rara tersenyum lebar dan bertekad: <b><i>"Jadi Dokter Hewan Itu Hebat! Aku ingin belajar giat agar kelak bisa menjadi dokter hewan yang menolong banyak hewan!"</i></b></p>`,
+                speechText: "Milo kini sudah sembuh total dan kembali aktif bermain mengejar bola kecil bersama Rara seperti sedia kala! Rara merasa sangat kagum melihat bagaimana Dokter Hewan memulihkan kesehatan hewan-hewan lucu yang menderita sakit. Rara tersenyum lebar dan bertekad: Jadi Dokter Hewan Itu Hebat! Aku ingin belajar giat agar kelak bisa menjadi dokter hewan yang menolong banyak hewan!",
+                renderVisual: () => `
+                    <div class="visual-room" style="background: linear-gradient(135deg, #e8f5e9 0%, #bbdefb 100%);">
+                        <div id="ending-cat" class="cat" style="animation: bounce 0.6s infinite ease-in-out; bottom:40px; left:40%;">🐱👑</div>
+                        <div class="confetti-container active" id="ending-confetti"></div>
+                        <div class="click-hint" style="bottom: 10px;">🏆 JADI DOKTER HEWAN ITU HEBAT! 🏆</div>
+                    </div>
+                `,
+                initVisual: () => {
+                    // Create confetti shower effect
+                    const confContainer = document.getElementById('ending-confetti');
+                    const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#00bcd4', '#4caf50', '#ffeb3b', '#ff9800'];
+                    for (let i = 0; i < 40; i++) {
+                        const piece = document.createElement('div');
+                        piece.className = 'confetti-piece';
+                        piece.style.left = `${Math.random() * 100}%`;
+                        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        piece.style.animationDelay = `${Math.random() * 2}s`;
+                        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                        confContainer.appendChild(piece);
+                    }
+                },
+                renderWidget: () => `
+                    <button class="replay-btn" onclick="resetStory()">Mulai Cerita Lagi 🔄</button>
+                `
+            }
+        ];
+
+        let currentScene = 1;
+        let exploredTools = { stetoskop: false, termometer: false, suntikan: false, perban: false, kandang: false, timbangan: false };
+        let completedCareCount = 0;
+        let isSpeaking = false;
+        let currentUtterance = null;
+        let autoVoiceoverEnabled = true;
+
+        // Sync local auto-voice setting
+        document.getElementById('auto-voice-switch').addEventListener('change', (e) => {
+            autoVoiceoverEnabled = e.target.checked;
+        });
+
+        function toggleAutoVoiceHome() {
+            const checkbox = document.getElementById('auto-voice-switch');
+            checkbox.checked = !checkbox.checked;
+            autoVoiceoverEnabled = checkbox.checked;
+        }
+
+        // Initialize Web Speech Synthesis voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        function startStory() {
+            const homeScreen = document.getElementById('home-screen');
+            const storyScreen = document.getElementById('story-screen');
+            
+            // Fade out homepage
+            homeScreen.style.opacity = '0';
+            setTimeout(() => {
+                homeScreen.style.display = 'none';
+                storyScreen.style.display = 'flex';
+                displayScene(1);
+            }, 500);
+        }
+
+        function displayScene(sceneId) {
+            currentScene = sceneId;
+            const scene = scenes[sceneId - 1];
+
+            // Render static texts
+            document.getElementById('scene-title-heading').innerText = scene.title;
+            document.getElementById('scene-narrative-content').innerHTML = scene.narrative;
+            
+            // Render visual area
+            const visualContainer = document.getElementById('illustration-container');
+            visualContainer.innerHTML = scene.renderVisual();
+            
+            // Render additional interactive widget if any
+            const widgetContainer = document.getElementById('interactive-controls-container');
+            if (scene.renderWidget) {
+                widgetContainer.innerHTML = scene.renderWidget();
+                widgetContainer.style.display = 'block';
+            } else {
+                widgetContainer.innerHTML = '';
+                widgetContainer.style.display = 'none';
+            }
+
+            // Run initializations for visuals
+            scene.initVisual();
+
+            // Update Navigation Buttons State
+            document.getElementById('prev-btn').disabled = (sceneId === 1);
+            
+            // For Scene 5: cannot click next until they click the tools (Pedagogical requirement)
+            updateNextButtonState();
+
+            // Stop speech if speaking
+            stopAudio();
+
+            // Automatically read scene text if voiceover is enabled
+            if (autoVoiceoverEnabled) {
+                // Short timeout to let transition complete and allow screen readers to sync
+                setTimeout(() => {
+                    speakNarrative(scene.speechText);
+                }, 400);
+            }
+        }
+
+        function checkAllToolsExplored() {
+            const allClicked = Object.values(exploredTools).every(val => val === true);
+            if (allClicked) {
+                const desc = document.getElementById('tool-desc');
+                desc.style.backgroundColor = '#e8f5e9';
+                desc.style.borderLeftColor = 'var(--primary)';
+                desc.innerHTML = '<strong>✨ Selamat!</strong> Rara telah mengenal semua alat medis dokter hewan dengan baik. Silakan klik tombol <b>Lanjut</b> untuk menegakkan diagnosis.';
+                updateNextButtonState();
+            }
+        }
+
+        function updateNextButtonState() {
+            const nextBtn = document.getElementById('next-btn');
+            if (currentScene === 5) {
+                const allClicked = Object.values(exploredTools).every(val => val === true);
+                nextBtn.disabled = !allClicked;
+                if (!allClicked) {
+                    nextBtn.title = "Silakan jelajahi semua alat medis dokter hewan terlebih dahulu!";
+                } else {
+                    nextBtn.title = "";
+                }
+            } else {
+                nextBtn.disabled = (currentScene === scenes.length);
+                nextBtn.title = "";
+            }
+        }
+
+        function nextScene() {
+            if (currentScene < scenes.length) {
+                // If scene 5, double check tools checked
+                if (currentScene === 5) {
+                    const allClicked = Object.values(exploredTools).every(val => val === true);
+                    if (!allClicked) {
+                        alert("Kamu harus mengenal semua alat dokter hewan terlebih dahulu sebelum melanjutkan!");
+                        return;
+                    }
+                }
+                displayScene(currentScene + 1);
+            }
+        }
+
+        function previousScene() {
+            if (currentScene > 1) {
+                displayScene(currentScene - 1);
+            }
+        }
+
+        function resetStory() {
+            // Reset state
+            exploredTools = { stetoskop: false, termometer: false, suntikan: false, perban: false, kandang: false, timbangan: false };
+            completedCareCount = 0;
+            
+            // Show Home Screen
+            const homeScreen = document.getElementById('home-screen');
+            const storyScreen = document.getElementById('story-screen');
+            
+            stopAudio();
+            
+            storyScreen.style.display = 'none';
+            homeScreen.style.display = 'flex';
+            homeScreen.style.opacity = '1';
+        }
+
+        // Custom Helper to Show Speech Bubble over Cat
+        function showSpeechBubble(element, text) {
+            const bubble = document.getElementById('speech-bubble');
+            if (bubble) {
+                bubble.innerText = text;
+                bubble.classList.add('show');
+                setTimeout(() => {
+                    bubble.classList.remove('show');
+                }, 1800);
+            }
+        }
+
+        // --- AUDIO / SPEECH SYNTHESIS ENGINE ---
+        function speakNarrative(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Terminate current speech
+
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.lang = 'id-ID';
+                currentUtterance.rate = 0.95; // Slightly relaxed pace for kids
+
+                // Select Indonesian voice if found
+                const voices = window.speechSynthesis.getVoices();
+                const indVoice = voices.find(voice => voice.lang.includes('id') || voice.lang.includes('ID'));
+                if (indVoice) {
+                    currentUtterance.voice = indVoice;
+                }
+
+                currentUtterance.onstart = () => {
+                    isSpeaking = true;
+                    const audioBtn = document.getElementById('audio-speak-btn');
+                    audioBtn.classList.add('speaking');
+                    audioBtn.innerText = '⏹️';
+                    audioBtn.title = 'Hentikan Suara';
+                };
+
+                currentUtterance.onend = () => {
+                    isSpeaking = false;
+                    const audioBtn = document.getElementById('audio-speak-btn');
+                    audioBtn.classList.remove('speaking');
+                    audioBtn.innerText = '🔊';
+                    audioBtn.title = 'Putar Audio Narasi';
+                };
+
+                currentUtterance.onerror = () => {
+                    isSpeaking = false;
+                    const audioBtn = document.getElementById('audio-speak-btn');
+                    audioBtn.classList.remove('speaking');
+                    audioBtn.innerText = '🔊';
+                };
+
+                window.speechSynthesis.speak(currentUtterance);
+            }
+        }
+
+        function stopAudio() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            isSpeaking = false;
+            const audioBtn = document.getElementById('audio-speak-btn');
+            if (audioBtn) {
+                audioBtn.classList.remove('speaking');
+                audioBtn.innerText = '🔊';
+                audioBtn.title = 'Putar Audio Narasi';
+            }
+        }
+
+        function toggleAudio() {
+            if (isSpeaking) {
+                stopAudio();
+            } else {
+                const currentSceneObj = scenes[currentScene - 1];
+                speakNarrative(currentSceneObj.speechText);
+            }
+        }
+
+        // Key Listeners for Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextScene();
+            }
+            if (e.key === 'ArrowLeft') {
+                previousScene();
+            }
+        });
+    </script>
+</body>
+</html>

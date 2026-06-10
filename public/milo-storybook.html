@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milo dan Dokter Hewan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #1b5e20;
+            height: 100vh; /* Tidak bisa scroll pada laptop */
+            overflow: hidden; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- HOMEPAGE STYLES --- */
+        #home-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8f5e9, #a5d6a7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .home-title {
+            font-size: 60px;
+            color: #2e7d32;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: bounce 2s infinite ease-in-out;
+            padding: 0 20px;
+        }
+
+        .home-emoji {
+            font-size: 120px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15));
+        }
+
+        .start-btn {
+            padding: 20px 50px;
+            font-size: 28px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: #388e3c;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        /* --- STORY STYLES --- */
+        #story-screen {
+            display: none; /* Disembunyikan awalnya */
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInStory 0.8s forwards;
+        }
+
+        @keyframes fadeInStory {
+            to { opacity: 1; }
+        }
+
+        .container {
+            width: 90vw;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        .scene-card {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: row; /* Layout Kiri-Kanan */
+        }
+
+        .scene-card.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Bagian Kiri: Ilustrasi */
+        .illustration-side {
+            flex: 1;
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 5px solid #81c784;
+            position: relative;
+        }
+
+        .illustration-emoji {
+            font-size: 25vh;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            animation: bounce 3s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Bagian Kanan: Teks & Navigasi */
+        .text-side {
+            flex: 1.2;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden; /* Dihilangkan fungsi scroll sesuai permintaan */
+            background-color: #fff;
+        }
+
+        .scene-title {
+            color: #2e7d32;
+            font-size: 36px;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #a5d6a7;
+            padding-bottom: 15px;
+        }
+
+        .narrative-text {
+            font-size: 22px;
+            line-height: 1.6;
+            color: #1b5e20;
+            flex-grow: 1;
+        }
+
+        /* Bagian Kontrol Bawah (Audio + Tombol Prev/Next) */
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #e8f5e9;
+        }
+
+        .audio-btn {
+            background: #ffb74d;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: #ffa726;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-family: inherit;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background: #2e7d32;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Responsif untuk layar HP */
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+                height: auto;
+            }
+            .home-title {
+                font-size: 40px;
+            }
+            .home-emoji {
+                font-size: 80px;
+            }
+            #story-screen {
+                height: auto;
+                padding: 15px;
+            }
+            .container {
+                width: 100%;
+                height: auto;
+                flex-direction: column;
+            }
+            .scene-card {
+                flex-direction: column;
+            }
+            .illustration-side {
+                padding: 40px;
+                border-right: none;
+                border-bottom: 5px solid #81c784;
+            }
+            .illustration-emoji {
+                font-size: 120px;
+            }
+            .text-side {
+                padding: 20px;
+                overflow: hidden;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .navigation {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .nav-button {
+                flex: 1;
+                text-align: center;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HOMEPAGE SCREEN -->
+    <div id="home-screen">
+        <div class="home-emoji">🐱🩺</div>
+        <h1 class="home-title">Milo dan Dokter Hewan</h1>
+        <button class="start-btn" onclick="startStory()">Mulai Cerita</button>
+    </div>
+
+    <!-- STORY SCREEN -->
+    <div id="story-screen">
+        <div class="container" id="scenes-container">
+            <!-- Scenes content akan dirender oleh JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const scenes = [
+            {
+                id: 1,
+                title: "Bermain Bersama Milo",
+                narrative: "Suatu pagi, Rara bermain bersama kucing kesayangannya, Milo.<br><br>Milo biasanya sangat aktif. Ia suka berlari, melompat, dan bermain bola kecil bersama Rara.<br><br>Tetapi hari ini Milo terlihat berbeda.<br><br>Milo hanya berbaring dan tidak mau bermain.<br><br>Rara mulai khawatir.<br><br>“Ibu… Milo kenapa ya?”",
+                illustration: "🐱"
+            },
+            {
+                id: 2,
+                title: "Milo Tidak Mau Makan",
+                narrative: "Saat waktu makan tiba, Milo hanya mencium makanannya lalu pergi.<br><br>Rara mengelus kepala Milo pelan.<br><br>“Biasanya Milo suka makan…”<br><br>Ibu memeriksa Milo lalu berkata dengan lembut:<br><br>“Sepertinya Milo sedang sakit. Yuk, kita bawa ke dokter hewan.”<br><br>Rara penasaran.<br><br>“Dokter hewan itu siapa, Bu?”<br><br>Ibu tersenyum.<br><br>“Dokter hewan adalah dokter yang membantu hewan supaya sehat lagi.”",
+                illustration: "🐟"
+            },
+            {
+                id: 3,
+                title: "Pergi ke Klinik Hewan",
+                narrative: "Rara dan Ibu membawa Milo ke klinik hewan.<br><br>Di sana ada banyak hewan lucu:<br><br>anak anjing,<br>kelinci,<br>burung kecil,<br>dan kucing lainnya.<br><br>Dinding klinik penuh gambar hewan berwarna-warni.<br><br>Rara melihat berbagai alat dokter yang menarik.<br><br>“Wah… tempatnya lucu sekali!”",
+                illustration: "🏥"
+            },
+            {
+                id: 4,
+                title: "Bertemu Dokter Hewan",
+                narrative: "Seorang dokter hewan datang sambil tersenyum ramah.<br><br>“Halo! Nama kucingnya siapa?”<br><br>“Namanya Milo!” jawab Rara.<br><br>Dokter jongkok agar sejajar dengan Rara.<br><br>“Hari ini Milo kurang sehat ya? Tapi tenang, dokter akan membantu Milo.”<br><br>Rara mulai merasa nyaman.",
+                illustration: "👨‍⚕️"
+            },
+            {
+                id: 5,
+                title: "Dokter Memeriksa Milo",
+                narrative: "Dokter memeriksa Milo dengan lembut.<br><br>Dokter berkata:<br><br>“Sepertinya perut Milo sakit karena makan makanan yang tidak cocok.”<br><br>Lalu dokter bertanya:<br><br>“Kemarin Milo makan apa ya?”<br><br>Rara berpikir sejenak.<br><br>“Milo sempat makan cokelat yang jatuh…”<br><br>Dokter mengangguk.<br><br>“Oh, itu sebabnya. Cokelat tidak baik untuk kucing.”<br><br>Rara jadi belajar hal baru.",
+                illustration: "🩺"
+            },
+            {
+                id: 6,
+                title: "Mengenal Alat Dokter Hewan",
+                narrative: "Dokter mengambil sebuah alat.<br><br>“Ini namanya stetoskop. Untuk mendengar detak jantung Milo.”<br><br>Dokter membiarkan Rara mencoba mendengarnya.<br><br>“Dug dug dug!” kata Rara sambil tersenyum.<br><br>Dokter lalu menunjukkan alat lain.<br><br>“Kalau ini termometer untuk mengecek suhu tubuh.”<br><br>“Dan lampu kecil ini membantu dokter melihat telinga dan mulut hewan.”<br><br>Rara terlihat kagum melihat semua alat dokter hewan.",
+                illustration: "🔧"
+            },
+            {
+                id: 7,
+                title: "Milo Mulai Sembuh",
+                narrative: "Dokter memberi Milo obat dan vitamin.<br><br>Dokter mengelus Milo pelan.<br><br>“Milo hebat sekali.”<br><br>Beberapa saat kemudian Milo mulai mengeong dan berdiri perlahan.<br><br>Rara tersenyum senang.<br><br>“Yeay! Milo sudah lebih baik!”",
+                illustration: "💊"
+            },
+            {
+                id: 8,
+                title: "Rara Menjadi Kagum",
+                narrative: "Rara melihat dokter hewan bisa:<br><br>membantu hewan sakit,<br>memakai alat-alat keren,<br>dan membuat hewan sehat kembali.<br><br>Rara berkata dengan semangat:<br><br>“Kalau besar nanti, aku mau jadi dokter hewan!”<br><br>Dokter tersenyum.<br><br>“Wah, itu cita-cita yang hebat. Dokter hewan harus sayang hewan dan rajin belajar.”",
+                illustration: "⭐"
+            },
+            {
+                id: 9,
+                title: "Pulang dengan Bahagia",
+                narrative: "Sebelum pulang, dokter memberi Rara stiker bergambar kucing kecil.<br><br>Rara memeluk Milo dengan hati senang.<br><br>Sekarang Milo sudah mulai sehat kembali.<br><br>Dan sejak hari itu…<br><br>Rara semakin sayang pada hewan dan bercita-cita menjadi dokter hewan.",
+                illustration: "🏠"
+            }
+        ];
+
+        let currentScene = 1;
+
+        function initStorybook() {
+            renderScenes();
+            displayScene(1);
+        }
+
+        function startStory() {
+            const homeScreen = document.getElementById('home-screen');
+            const storyScreen = document.getElementById('story-screen');
+            
+            // Animasi transisi masuk
+            homeScreen.style.opacity = '0';
+            setTimeout(() => {
+                homeScreen.style.display = 'none';
+                storyScreen.style.display = 'flex';
+            }, 500);
+        }
+
+        function renderScenes() {
+            const container = document.getElementById('scenes-container');
+            const illustrationEmoji = {
+                '🐱': '🐱', '🐟': '🐟', '🏥': '🏥', '👨‍⚕️': '👨‍⚕️',
+                '🩺': '🩺', '🔧': '🔧', '💊': '💊', '⭐': '⭐', '🏠': '🏠'
+            };
+
+            scenes.forEach(scene => {
+                const sceneCard = document.createElement('div');
+                sceneCard.className = 'scene-card';
+                sceneCard.id = `scene-${scene.id}`;
+
+                sceneCard.innerHTML = `
+                    <div class="illustration-side">
+                        <div class="illustration-emoji">${illustrationEmoji[scene.illustration] || scene.illustration}</div>
+                    </div>
+                    <div class="text-side">
+                        <div>
+                            <h2 class="scene-title">${scene.title}</h2>
+                            <div class="narrative-text">
+                                ${scene.narrative}
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <button class="audio-btn" onclick="playAudio()" title="Putar Audio">🔊</button>
+                            <div class="navigation">
+                                <button class="nav-button" id="prev-btn-${scene.id}" onclick="previousScene()">← Sebelumnya</button>
+                                <button class="nav-button" id="next-btn-${scene.id}" onclick="nextScene()">Selanjutnya →</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(sceneCard);
+            });
+        }
+
+        function displayScene(sceneId) {
+            // Sembunyikan semua adegan
+            document.querySelectorAll('.scene-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            // Tampilkan adegan saat ini
+            const activeCard = document.getElementById(`scene-${sceneId}`);
+            if (activeCard) {
+                activeCard.classList.add('active');
+            }
+
+            currentScene = sceneId;
+
+            // Update status tombol navigasi
+            const prevBtn = document.getElementById(`prev-btn-${sceneId}`);
+            const nextBtn = document.getElementById(`next-btn-${sceneId}`);
+            
+            if (prevBtn) prevBtn.disabled = sceneId === 1;
+            if (nextBtn) nextBtn.disabled = sceneId === scenes.length;
+        }
+
+        function nextScene() {
+            if (currentScene < scenes.length) {
+                displayScene(currentScene + 1);
+            }
+        }
+
+        function previousScene() {
+            if (currentScene > 1) {
+                displayScene(currentScene - 1);
+            }
+        }
+
+        function playAudio() {
+            // Placeholder fitur audio
+            alert("Fitur audio akan segera hadir! 🎵 (Menunggu ditambahkan audio aslinya)");
+        }
+
+        // Navigasi menggunakan keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextScene();
+            if (e.key === 'ArrowLeft') previousScene();
+        });
+
+        // Inisialisasi saat halaman dimuat
+        window.addEventListener('load', initStorybook);
+    </script>
+</body>
+</html>
