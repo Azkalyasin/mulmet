@@ -48,7 +48,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            background: linear-gradient(135deg, #FFF9E6 0%, #E8F5E9 50%, #E0F2F1 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -57,76 +57,54 @@
             transition: opacity 0.5s ease;
             text-align: center;
             padding: 20px;
+            overflow: hidden;
         }
 
         .home-card {
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 32px;
-            box-shadow: var(--shadow);
-            max-width: 650px;
+            padding: 50px 40px;
+            border-radius: 40px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+            max-width: 620px;
             width: 100%;
-            border: 4px solid #a5d6a7;
+            border: 6px solid white;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .home-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.12);
         }
 
         .home-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.08));
-            animation: float 3s infinite ease-in-out;
+            font-size: 96px;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.1));
+            animation: float 3.5s infinite ease-in-out;
         }
 
         .home-title {
-            font-size: 36px;
+            font-size: 40px;
             color: var(--primary-dark);
-            margin-bottom: 10px;
-            line-height: 1.2;
+            margin-bottom: 12px;
+            line-height: 1.25;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-dark), #1b5e20);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .home-subtitle {
-            font-size: 20px;
+            font-size: 22px;
             color: #558b2f;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-
-        .role-section {
-            margin-bottom: 30px;
-            background: var(--primary-light);
-            padding: 15px 25px;
-            border-radius: 16px;
-            width: 100%;
-            border: 2px dashed #81c784;
-        }
-
-        .role-section h2 {
-            font-size: 16px;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 35px;
             font-weight: 600;
-        }
-
-        .role-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .role-item strong {
-            color: var(--primary-dark);
-            display: block;
-        }
-
-        .role-item span {
-            color: #555;
-            font-size: 13px;
+            letter-spacing: 0.5px;
         }
 
         .home-controls {
@@ -138,23 +116,23 @@
         }
 
         .start-btn {
-            padding: 16px 45px;
-            font-size: 24px;
-            background: var(--primary);
+            padding: 18px 50px;
+            font-size: 26px;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 22px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
             transition: var(--transition);
             font-family: inherit;
         }
 
         .start-btn:hover {
             transform: scale(1.05) translateY(-3px);
-            background: var(--primary-dark);
-            box-shadow: 0 12px 25px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.45);
         }
 
         /* Auto-voiceover Switch */
@@ -259,12 +237,62 @@
 
         .text-side {
             flex: 0.65;
-            padding: 35px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             background: white;
+            overflow: hidden;
+        }
+
+        #text-scroll-container {
+            flex: 1;
             overflow-y: auto;
+            margin-bottom: 12px;
+            padding-right: 6px;
+        }
+
+        /* Custom scrollbar for text scroll container */
+        #text-scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #text-scroll-container::-webkit-scrollbar-track {
+            background: #f1f8e9;
+            border-radius: 4px;
+        }
+        #text-scroll-container::-webkit-scrollbar-thumb {
+            background: #a5d6a7;
+            border-radius: 4px;
+        }
+        #text-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Decorative Floating Emojis on Homepage */
+        .floating-deco {
+            position: absolute;
+            font-size: 56px;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.06));
+            user-select: none;
+            pointer-events: none;
+            opacity: 0.18;
+            z-index: 1;
+        }
+        
+        .deco-1 { top: 10%; left: 8%; animation: float-slow 6s infinite ease-in-out; }
+        .deco-2 { bottom: 12%; right: 8%; animation: float-slow 7s infinite ease-in-out 1s; }
+        .deco-3 { top: 15%; right: 10%; animation: float-slow 8s infinite ease-in-out 2s; }
+        .deco-4 { bottom: 15%; left: 10%; animation: float-slow 5s infinite ease-in-out 1.5s; }
+        .deco-5 { top: 52%; left: 5%; animation: float-slow 9s infinite ease-in-out 0.5s; font-size: 38px; }
+        .deco-6 { top: 48%; right: 5%; animation: float-slow 7.5s infinite ease-in-out 2.5s; font-size: 38px; }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(15deg);
+            }
         }
 
         /* --- IMAGE VIEWER & FALLBACKS --- */
@@ -335,24 +363,39 @@
         }
 
         /* --- NARRATIVE TYPOGRAPHY --- */
+        .fade-in-text {
+            animation: fadeInTextEffect 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes fadeInTextEffect {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .scene-title {
             color: var(--primary);
-            font-size: 28px;
-            margin-bottom: 15px;
+            font-size: 24px;
+            margin-bottom: 8px;
             border-bottom: 3px dashed #c8e6c9;
-            padding-bottom: 10px;
+            padding-bottom: 6px;
             font-weight: 700;
         }
 
         .narrative-text {
-            font-size: 17px;
-            line-height: 1.6;
+            font-size: 15.5px;
+            line-height: 1.5;
             color: #37474f;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .narrative-text p {
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         /* --- NAVIGATION CONTROLS --- */
@@ -360,8 +403,8 @@
             margin-top: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding-top: 15px;
+            gap: 6px;
+            padding-top: 10px;
             border-top: 2px solid #f1f8e9;
         }
 
@@ -1037,6 +1080,14 @@
             .text-side {
                 padding: 20px;
                 min-height: 450px;
+                overflow: visible;
+            }
+
+            #text-scroll-container {
+                overflow-y: visible;
+                height: auto;
+                margin-bottom: 20px;
+                padding-right: 0;
             }
 
             .tool-grid {
@@ -1061,24 +1112,18 @@
 
     <!-- HOMEPAGE SCREEN -->
     <div id="home-screen">
+        <!-- Floating decorative elements -->
+        <div class="floating-deco deco-1">🐱</div>
+        <div class="floating-deco deco-2">🐶</div>
+        <div class="floating-deco deco-3">🩺</div>
+        <div class="floating-deco deco-4">🩹</div>
+        <div class="floating-deco deco-5">✨</div>
+        <div class="floating-deco deco-6">💊</div>
+
         <div class="home-card">
             <div class="home-emoji">🐱🩺✨</div>
             <h1 class="home-title">Hebatnya Menjadi Dokter Hewan</h1>
             <p class="home-subtitle">Petualangan Rara dan Milo</p>
-
-            <div class="role-section">
-                <h2>Kelompok Penyusun (UCP 2)</h2>
-                <div class="role-grid">
-                    <div class="role-item">
-                        <strong>Azkal Adzkia</strong>
-                        <span>Visual & Animation Designer</span>
-                    </div>
-                    <div class="role-item">
-                        <strong>M. Aqil Firdaus</strong>
-                        <span>Interaction & Audio Developer</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="home-controls">
                 <button class="start-btn" onclick="startStory()">Mulai Petualangan 🚀</button>
@@ -1103,15 +1148,17 @@
 
             <!-- Right Side: Narrative & Controls -->
             <div class="text-side">
-                <div>
-                    <h2 class="scene-title" id="scene-title-heading">Judul Adegan</h2>
-                    <div class="narrative-text" id="scene-narrative-content">
-                        <!-- Content injected dynamically -->
-                    </div>
+                <div id="text-scroll-container">
+                    <div id="text-content-wrapper" class="fade-in-text">
+                        <h2 class="scene-title" id="scene-title-heading">Judul Adegan</h2>
+                        <div class="narrative-text" id="scene-narrative-content">
+                            <!-- Content injected dynamically -->
+                        </div>
 
-                    <!-- Dynamic interactive controls inserted depending on scene -->
-                    <div id="interactive-controls-container">
-                        <!-- Custom widgets injected dynamically -->
+                        <!-- Dynamic interactive controls inserted depending on scene -->
+                        <div id="interactive-controls-container">
+                            <!-- Custom widgets injected dynamically -->
+                        </div>
                     </div>
                 </div>
 
@@ -1151,7 +1198,7 @@
                         <img class="scene-img" src="assets/images/scene1.jpg" alt="Rara dan Milo Bermain" onerror="handleImageError(this, 'scene1.jpg', 'Halaman 1: Rara & Milo Suka Bermain', 'Kamar Rara yang rapi, Rara sedang melemparkan bola mainan merah ke arah Milo, si kucing berbulu jingga yang lincah.')">
                     </div>
                 `,
-                initVisual: () => {}
+                initVisual: () => { }
             },
             {
                 id: 2,
@@ -1171,7 +1218,7 @@
                         <img class="scene-img" src="assets/images/scane2.jpg" alt="Milo Lemas" onerror="handleImageError(this, 'scane2.jpg', 'Halaman 2: Milo Terlihat Tidak Sehat', 'Milo terbaring lemas di bantal di sudut kamar dengan mata sayu. Makanan ikan di mangkuknya tampak utuh tidak disentuh.')">
                     </div>
                 `,
-                initVisual: () => {}
+                initVisual: () => { }
             },
             {
                 id: 3,
@@ -1191,7 +1238,7 @@
                         <img class="scene-img" src="assets/images/scane3.jpg" alt="Pergi ke Klinik" onerror="handleImageError(this, 'scane3.jpg', 'Halaman 3: Pergi ke Dokter Hewan', 'Ibu menghibur Rara di ruang tamu. Mereka sepakat membawa Milo ke dokter hewan. Milo dimasukkan ke dalam keranjang hewan.')">
                     </div>
                 `,
-                initVisual: () => {}
+                initVisual: () => { }
             },
             {
                 id: 4,
@@ -1209,12 +1256,12 @@
                         <img class="scene-img" src="assets/images/scane4.jpg" alt="Klinik Dokter Hewan" onerror="handleImageError(this, 'scane4.jpg', 'Halaman 4: Sampai di Klinik Hewan', 'Ruang penerimaan tamu klinik hewan yang sangat bersih, terang, dan nyaman dengan poster kucing dan anjing lucu. Dokter ramah menyambut mereka.')">
                     </div>
                 `,
-                initVisual: () => {}
+                initVisual: () => { }
             },
             {
                 id: 5,
                 title: "Halaman 5: Dokter Memeriksa Milo",
-                imageSrc: "scene5.png",
+                imageSrc: "scane5.png",
                 audioSrc: "assets/audio/scene5.mp3",
                 visualDesc: "Milo diletakkan di atas meja periksa perak. Dokter dengan stetoskop menggantung di lehernya sedang memeriksa Milo, Rara melihat penasaran.",
                 narrative: `<p>Dokter hewan mulai memeriksa Milo dengan hati-hati.</p>
@@ -1226,35 +1273,34 @@
                             <p style="font-weight:bold; color:var(--accent-dark); margin-top:10px;">🩺 Jelajahi alat-alat dokter hewan di bawah untuk melihat kegunaannya!</p>`,
                 renderVisual: () => `
                     <div class="scene-image-wrapper">
-                        <img class="scene-img" src="assets/images/scene5.png" alt="Dokter Memeriksa Milo" onerror="handleImageError(this, 'scene5.png', 'Halaman 5: Dokter Memeriksa Milo', 'Milo diletakkan di atas meja periksa perak. Dokter dengan stetoskop menggantung di lehernya sedang memeriksa Milo, Rara melihat penasaran.')">
-                        <div class="overlay-container">
-                            <!-- Stethoscope Pulse -->
-                            <div class="pulse-overlay" id="heartbeat-pulse">
-                                <div class="pulse-circle"></div>
-                            </div>
-                            <!-- Thermometer Bar -->
-                            <div class="thermometer-bar-container" id="thermo-container">
-                                <div class="thermometer-fill" id="thermo-fill"></div>
-                            </div>
-                            <!-- Syringe tool overlay -->
-                            <div class="syringe-tool" id="syringe-tool">💧💉</div>
-                            <div class="drop" id="syringe-drop">💧</div>
-                            <!-- Bandage overlay -->
-                            <div id="bandage-overlay" class="interactive-element" style="font-size:70px; display:none; bottom:120px; left:45%;">🩹</div>
-                        </div>
+                        <video class="scene-img" id="scene5-video" autoplay muted loop playsinline>
+                            <source src="assets/images/Dokter_hewan_memeriksa_kondisi.mp4" type="video/mp4">
+                            Browser Anda tidak mendukung pemutaran video.
+                        </video>
+                        <img class="scene-img" id="scene5-img" src="" alt="Dokter Memeriksa Milo" style="display: none;">
                     </div>
                 `,
                 initVisual: () => {
+                    const video = document.getElementById('scene5-video');
+                    const img = document.getElementById('scene5-img');
+                    
+                    const triggerFallback = () => {
+                        if (img && !img.src) {
+                            video.style.display = 'none';
+                            img.style.display = 'block';
+                            img.src = "assets/images/scane5.png";
+                            img.onerror = function () {
+                                handleImageError(this, 'scane5.png', 'Halaman 5: Dokter Memeriksa Milo', 'Milo diletakkan di atas meja periksa perak. Dokter dengan stetoskop menggantung di lehernya sedang memeriksa Milo, Rara melihat penasaran.');
+                            };
+                        }
+                    };
+
+                    if (video) {
+                        video.addEventListener('error', triggerFallback);
+                    }
+
                     window.selectTool = (toolId) => {
                         const descBox = document.getElementById('tool-desc');
-
-                        // Reset all animations/overlays
-                        document.getElementById('heartbeat-pulse').classList.remove('active');
-                        document.getElementById('thermo-container').style.display = 'none';
-                        document.getElementById('thermo-fill').style.height = '0%';
-                        document.getElementById('syringe-tool').style.opacity = '0';
-                        document.getElementById('syringe-drop').style.opacity = '0';
-                        document.getElementById('bandage-overlay').style.display = 'none';
 
                         // Active states
                         document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
@@ -1267,32 +1313,15 @@
                         switch (toolId) {
                             case 'stetoskop':
                                 descBox.innerHTML = "<strong>🩺 Stetoskop:</strong> Digunakan untuk mendengar detak jantung dan pernapasan hewan. Dokter menempelkannya ke dada Milo. Detak jantung Milo terdengar teratur.";
-                                document.getElementById('heartbeat-pulse').classList.add('active');
                                 break;
                             case 'termometer':
                                 descBox.innerHTML = "<strong>🌡️ Termometer:</strong> Digunakan untuk memeriksa suhu tubuh Milo. Suhu badan Milo terukur 38.8°C, sedikit hangat karena flu.";
-                                const thermoContainer = document.getElementById('thermo-container');
-                                thermoContainer.style.display = 'flex';
-                                setTimeout(() => {
-                                    document.getElementById('thermo-fill').style.height = '78%';
-                                }, 50);
                                 break;
                             case 'suntikan':
                                 descBox.innerHTML = "<strong>💉 Suntikan:</strong> Digunakan untuk menyuntikkan vaksin atau obat cair ke dalam tubuh hewan agar mereka lekas sembuh.";
-                                const syringe = document.getElementById('syringe-tool');
-                                const drop = document.getElementById('syringe-drop');
-                                syringe.style.opacity = '1';
-                                drop.style.opacity = '1';
-                                syringe.style.animation = 'showSyringe 1.5s ease-in-out forwards';
-                                drop.style.animation = 'drip 1.5s ease-in-out forwards';
-                                setTimeout(() => {
-                                    syringe.style.animation = 'none';
-                                    drop.style.animation = 'none';
-                                }, 1500);
                                 break;
                             case 'perban':
                                 descBox.innerHTML = "<strong>🩹 Perban:</strong> Berfungsi untuk menutup dan membalut luka pada hewan peliharaan agar terhindar dari debu dan kotoran.";
-                                document.getElementById('bandage-overlay').style.display = 'block';
                                 break;
                             case 'kandang':
                                 descBox.innerHTML = "<strong>🧺 Kandang Klinik:</strong> Tempat menginap sementara bagi hewan-hewan yang memerlukan pemantauan ketat dari dokter.";
@@ -1471,42 +1500,13 @@
                             <p>Milo terlihat tenang selama diperiksa.</p>
                             <p>“Hebat sekali, Milo,” puji Rara.</p>
                             <p>Dokter membersihkan tubuh Milo dan memberikan petunjuk perawatan yang harus dilakukan di rumah.</p>
-                            <p>Rara mendengarkan dengan baik agar Milo bisa cepat sehat kembali.</p>
-                            <p style="font-weight:bold; color:var(--accent-dark); margin-top:10px;">💊 Klik tombol di bawah untuk membantu Dokter memberikan obat!</p>`,
+                            <p>Rara mendengarkan dengan baik agar Milo bisa cepat sehat kembali.</p>`,
                 renderVisual: () => `
-                    <div class="scene-image-wrapper" id="treat-stage">
+                    <div class="scene-image-wrapper">
                         <img class="scene-img" src="assets/images/scane7.jpg" alt="Milo Diberi Obat" onerror="handleImageError(this, 'scane7.jpg', 'Halaman 7: Milo Mendapat Pengobatan', 'Dokter dengan hati-hati memegang pipet obat menyuapi Milo obat. Milo terlihat tenang menurut. Rara tersenyum senang.')">
-                        <div class="overlay-container">
-                            <div class="syringe-tool" id="treat-syringe">🧴💊</div>
-                            <div class="drop" id="treat-drop">💧</div>
-                            <div id="treat-bubble" class="interactive-element" style="font-size:30px; display:none; top:30%; left:30%; background:white; padding:5px 12px; border-radius:12px; border:2px solid var(--primary);">Ngeong! 💖</div>
-                        </div>
                     </div>
                 `,
-                initVisual: () => {
-                    window.applyTreatment = () => {
-                        const treatStage = document.getElementById('treat-stage');
-                        const treatBtn = document.getElementById('treat-action-btn');
-                        const bubble = document.getElementById('treat-bubble');
-
-                        if (treatStage && treatBtn) {
-                            treatBtn.disabled = true;
-                            treatStage.classList.add('animate-treatment');
-
-                            setTimeout(() => {
-                                if (bubble) bubble.style.display = 'block';
-                                treatBtn.innerText = "Milo Berhasil Diobati! 🎉";
-                            }, 1200);
-                        }
-                    };
-                },
-                renderWidget: () => `
-                    <div class="widget-wrapper">
-                        <div class="treatment-widget">
-                            <button class="treat-btn" id="treat-action-btn" onclick="applyTreatment()">Beri Obat & Vitamin 💊</button>
-                        </div>
-                    </div>
-                `
+                initVisual: () => {}
             },
             {
                 id: 8,
@@ -1526,7 +1526,7 @@
                         <img class="scene-img" src="assets/images/scane8.jpg" alt="Tips Merawat Kucing" onerror="handleImageError(this, 'scane8.jpg', 'Halaman 8: Belajar Merawat Kucing', 'Dokter memegang selembar brosur bergambar tips merawat kucing: makanan sehat, air bersih, kebersihan kandang. Rara menyimaknya.')">
                     </div>
                 `,
-                initVisual: () => {},
+                initVisual: () => { },
                 renderWidget: () => `
                     <div class="widget-wrapper">
                         <div class="care-guide-container">
@@ -1567,7 +1567,7 @@
             {
                 id: 9,
                 title: "Halaman 9: Milo Sehat Kembali",
-                imageSrc: "scene9.png",
+                imageSrc: "scane9.mp4",
                 audioSrc: "assets/audio/scene9.mp3",
                 visualDesc: "Suasana cerah di rumah, Milo berlari melompat ceria mengejar bola. Rara tertawa gembira melihat kucingnya sehat kembali.",
                 narrative: `<p>Beberapa hari kemudian, Milo sudah kembali sehat.</p>
@@ -1578,13 +1578,35 @@
                             <p style="font-weight:bold; font-size:19px; color:var(--primary-dark); text-align:center; margin-top:20px;">🏆 Tamat 🏆</p>`,
                 renderVisual: () => `
                     <div class="scene-image-wrapper">
-                        <img class="scene-img" src="assets/images/scene9.png" alt="Milo Sehat Kembali" onerror="handleImageError(this, 'scene9.png', 'Halaman 9: Milo Sehat Kembali', 'Suasana cerah di rumah, Milo berlari melompat ceria mengejar bola. Rara tertawa gembira melihat kucingnya sehat kembali.')">
+                        <video class="scene-img" id="scene9-video" autoplay muted loop playsinline>
+                            <source src="assets/images/scane9.mp4" type="video/mp4">
+                            Browser Anda tidak mendukung pemutaran video.
+                        </video>
+                        <img class="scene-img" id="scene9-img" src="" alt="Milo Sehat Kembali" style="display: none;">
                         <div class="overlay-container">
                             <div class="confetti-container active" id="ending-confetti"></div>
                         </div>
                     </div>
                 `,
                 initVisual: () => {
+                    const video = document.getElementById('scene9-video');
+                    const img = document.getElementById('scene9-img');
+                    
+                    const triggerFallback = () => {
+                        if (img && !img.src) {
+                            video.style.display = 'none';
+                            img.style.display = 'block';
+                            img.src = "assets/images/scene9.png";
+                            img.onerror = function () {
+                                handleImageError(this, 'scene9.png', 'Halaman 9: Milo Sehat Kembali', 'Suasana cerah di rumah, Milo berlari melompat ceria mengejar bola. Rara tertawa gembira melihat kucingnya sehat kembali.');
+                            };
+                        }
+                    };
+
+                    if (video) {
+                        video.addEventListener('error', triggerFallback);
+                    }
+
                     const confContainer = document.getElementById('ending-confetti');
                     if (confContainer) {
                         const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#00bcd4', '#4caf50', '#ffeb3b', '#ff9800'];
@@ -1669,6 +1691,14 @@
         function displayScene(sceneId) {
             currentScene = sceneId;
             const scene = scenes[sceneId - 1];
+
+            // Trigger fade-in animation for text content
+            const textWrapper = document.getElementById('text-content-wrapper');
+            if (textWrapper) {
+                textWrapper.classList.remove('fade-in-text');
+                void textWrapper.offsetWidth; // Trigger reflow to restart CSS animation
+                textWrapper.classList.add('fade-in-text');
+            }
 
             // Injeksi teks judul dan narasi
             document.getElementById('scene-title-heading').innerText = scene.title;
