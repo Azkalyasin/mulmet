@@ -1,5 +1,4 @@
 Place your narrative voiceover audio files here:
-- pembuka.mp3
 - scene1.mp3
 - scene2.mp3
 - scene3.mp3

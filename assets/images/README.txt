@@ -1,5 +1,4 @@
 Place your storybook images in this folder:
-- pembuka.png
 - scene1.png
 - scene2.png
 - scene3.png
