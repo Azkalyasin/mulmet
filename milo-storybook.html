@@ -1109,6 +1109,8 @@
 
     <!-- STORY AUDIO HTML5 ELEMENT -->
     <audio id="story-audio"></audio>
+    <!-- BACKGROUND MUSIC AUDIO ELEMENT -->
+    <audio id="bg-music" src="assets/audio/BgSuara.mp3" loop></audio>
 
     <!-- HOMEPAGE SCREEN -->
     <div id="home-screen">
@@ -1680,6 +1682,18 @@
             const homeScreen = document.getElementById('home-screen');
             const storyScreen = document.getElementById('story-screen');
 
+            // Play background music kustom dengan volume pelan (15%) agar tidak mengganggu audio cerita/video asli
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.volume = 0.15;
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn("Gagal memutar background music secara otomatis: ", error);
+                    });
+                }
+            }
+
             homeScreen.style.opacity = '0';
             setTimeout(() => {
                 homeScreen.style.display = 'none';
@@ -1838,6 +1852,13 @@
             audioPlayer.pause();
             updateAudioButtonState(false);
             audioWarning.style.display = 'none';
+
+            // Hentikan background music saat kembali ke homepage
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+            }
 
             const homeScreen = document.getElementById('home-screen');
             const storyScreen = document.getElementById('story-screen');
